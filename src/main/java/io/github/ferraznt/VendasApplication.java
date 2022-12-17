@@ -22,22 +22,26 @@ public class VendasApplication {
     @Bean
     public CommandLineRunner init(){
         return args -> {
-            clientes.salvar(new Cliente("Cesinha - The Rock"));
-            clientes.salvar(new Cliente("Otalino Ou Ta Cholano"));
-            clientes.salvar(new Cliente("Milsão From The Galaxies"));
-            clientes.salvar(new Cliente("Vevé, El Perigote De Las Chicas"));
-            clientes.salvar(new Cliente("Hiago Big Boss"));
-            clientes.salvar(new Cliente("Otávio The Master of Big Hotweels"));
-            clientes.salvar(new Cliente("Marlon Brando"));
-            clientes.salvar(new Cliente("Bruno's"));
 
+            System.out.println("INCLUINDO OS NOVOS CLIENTES");
 
-            List<Cliente> todosOsClientes = clientes.buscarTodos();
+            clientes.save(new Cliente("Cesinha - The Rock"));
+            clientes.save(new Cliente("Otalino Ou Ta Cholano"));
+            clientes.save(new Cliente("Milsão From The Galaxies"));
+            clientes.save(new Cliente("Vevé, El Perigote De Las Chicas"));
+            clientes.save(new Cliente("Hiago Big Boss"));
+            clientes.save(new Cliente("Otávio The Master of Big Hotweels"));
+            clientes.save(new Cliente("Marlon Brando"));
+            clientes.save(new Cliente("Bruno's"));
+
+            List<Cliente> todosOsClientes = clientes.findAll();
             System.out.println("["+ LocalDateTime.now() +"] === IMPRIMINDO LISTA DE CLIENTES DA GREGSYSTEM! ===");
+
             todosOsClientes.forEach(System.out::println);
+
             System.out.println("["+ LocalDateTime.now() +"] === FIM DA LISTA ===");
 
-            List<Cliente> listarPorNome = clientes.buscarPorNome("ch");
+            List<Cliente> listarPorNome = clientes.findByNomeContainingIgnoreCase("ch");
 
             System.out.println("Listando por Nome:");
             listarPorNome.forEach(System.out::println);
@@ -48,7 +52,7 @@ public class VendasApplication {
                 System.out.println("Nenhum Cliente Encontrado!");
             }else{
               for (Cliente cliente : listarPorNome) {
-                  System.out.println("Deletando o CLinente: "+cliente.getId()+" - "+cliente.getNome());
+                  System.out.println("Deletando o Cliente: "+cliente.getId()+" - "+cliente.getNome());
                   clientes.delete(cliente);
               }
             }
@@ -58,7 +62,7 @@ public class VendasApplication {
     @GetMapping("/clientes")
     public List<Cliente> getClientes(){
 
-        List<Cliente> todosOsClientes = clientes.buscarTodos();
+        List<Cliente> todosOsClientes = clientes.findAll();
         return todosOsClientes;
 
     }
@@ -67,12 +71,10 @@ public class VendasApplication {
     public Cliente salvarClientes(@RequestBody Cliente cliente){
 
         System.out.println("O Cliente que você está tentando salvar é: "+cliente.getNome());
-        clientes.salvar(cliente);
-
+        clientes.save(cliente);
         return cliente;
 
     }
-
 
     public static void main(String[] args) {
         SpringApplication.run(VendasApplication.class, args);
