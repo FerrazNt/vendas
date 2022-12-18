@@ -2,18 +2,26 @@ package io.github.ferraznt.domain.entity;
 
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table( name = "cliente" )
 public class Cliente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLIENTE_SEQ")
+    @SequenceGenerator(name = "CLIENTE_SEQ", initialValue = 1, allocationSize = 1)
     @Column(name = "id")
     private Integer id;
 
     @Column(name = "nome", length = 100)
     private String nome;
+
+    //FetchType.LAZY já é o Default, mas foi colocado aqui para elucidar que
+    //   ele serve para que quando carregue a CLasse cliente, não carregue todos os
+    //   pedidos por Padrão. Para habilitar o Carregamento automático, usar o EAGER. (Não recomendado)
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+    private Set<Pedido> pedidos;
 
     public Cliente(){
 
@@ -41,6 +49,14 @@ public class Cliente {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Set<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(Set<Pedido> pedidos) {
+        this.pedidos = pedidos;
     }
 
     @Override
