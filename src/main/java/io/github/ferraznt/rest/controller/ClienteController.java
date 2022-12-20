@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -34,5 +32,25 @@ public class ClienteController {
         return ResponseEntity.notFound().build();
 
     }
+
+    @PostMapping("/api/clientes")
+    @ResponseBody
+    public ResponseEntity salvar(@RequestBody Cliente cliente){
+        Cliente novoCliente = clientesRepository.save(cliente);
+        return ResponseEntity.ok(novoCliente);
+
+    }
+
+    @DeleteMapping("/api/clientes/{id}")
+    @ResponseBody
+    public ResponseEntity delete(@PathVariable Integer id){
+        Optional<Cliente> cliente = clientesRepository.findById(id);
+        if(cliente.isPresent()){
+            clientesRepository.delete(cliente.get());
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 
 }

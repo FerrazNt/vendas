@@ -1,6 +1,8 @@
 package io.github.ferraznt.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -20,6 +22,7 @@ public class Cliente {
     //FetchType.LAZY já é o Default, mas foi colocado aqui para elucidar que
     //   ele serve para que quando carregue a CLasse cliente, não carregue todos os
     //   pedidos por Padrão. Para habilitar o Carregamento automático, usar o EAGER. (Não recomendado)
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private Set<Pedido> pedidos;
 

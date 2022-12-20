@@ -15,14 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class VendasApplication {
 
     // Método para salvar um Cliente em Tempo de Execussão.
-    @Bean
-    public CommandLineRunner commandLineRunner(@Autowired ClientesRepository cr){
-        return args -> {
-            Cliente c = new Cliente(null, "Gregório Ferraz");
-            cr.save(c);
-        };
-
-    }
     public static void main(String[] args) {
         SpringApplication.run(VendasApplication.class, args);
     }
