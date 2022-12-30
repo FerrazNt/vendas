@@ -37,6 +37,12 @@ public class ProdutoController {
 
     }
 
+    @GetMapping("/{id}")
+    public Produto getProduto(@PathVariable Integer  id){
+        return produtosRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "INFO! Produto Não Existe."));
+    }
+
     // Método 2 - Gravar novo produto.
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
