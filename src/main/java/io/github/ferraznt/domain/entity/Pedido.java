@@ -1,14 +1,21 @@
 package io.github.ferraznt.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "pedido")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pedido {
 
     @Id
@@ -29,53 +36,11 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itens;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public LocalDateTime getDataPedido() {
-        return dataPedido;
-    }
-
-    public void setDataPedido(LocalDateTime dataPedido) {
-        this.dataPedido = dataPedido;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public List<ItemPedido> getItens() {
-        return itens;
-    }
-    public void setItens(List<ItemPedido> itens) {
-        this.itens = itens;
-    }
-
-    @Override
-    public String toString() {
-        return "Pedido{" +
-                "id=" + id +
-                ", cliente=" + cliente +
-                ", dataPedido=" + dataPedido +
-                ", total=" + total +
-                '}';
+    private List<ItemPedido> getItens(){
+        if(this.itens == null){
+            this.itens = new ArrayList<>();
+        }
+        return this.itens;
     }
 
 }
