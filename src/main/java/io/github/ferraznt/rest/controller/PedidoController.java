@@ -2,6 +2,7 @@ package io.github.ferraznt.rest.controller;
 
 
 import io.github.ferraznt.domain.entity.Pedido;
+import io.github.ferraznt.exception.RegraNegocioException;
 import io.github.ferraznt.rest.dto.PedidoDTO;
 import io.github.ferraznt.service.PedidoService;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class PedidoController {
     @GetMapping("/{id}")
     public Pedido buscar(@PathVariable Integer id){
         Optional<Pedido> pedido = pedidoService.findById(id);
-        pedido.orElseThrow(() -> new ResponseStatusException(NOT_FOUND,"Pedido não Encontrado!"));
+        pedido.orElseThrow(() -> new RegraNegocioException("Pedido não Encontrado!"));
         return pedido.get();
     }
 }
