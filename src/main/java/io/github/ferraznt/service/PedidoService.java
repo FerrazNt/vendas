@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface PedidoService {
     Pedido salvar(PedidoDTO dto );
 
-    Optional<Pedido> findById(Integer id);
+    Optional<Pedido> obterPedidoCompleto(Integer id);
 
 }

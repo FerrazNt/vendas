@@ -33,14 +33,8 @@ public class Pedido {
     @Column(name = "total", length = 20, precision = 20, scale = 2)
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "pedido")
+    @Column(name="itens")
+    @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
     private List<ItemPedido> itens;
-
-    private List<ItemPedido> getItens(){
-        if(this.itens == null){
-            this.itens = new ArrayList<>();
-        }
-        return this.itens;
-    }
 
 }

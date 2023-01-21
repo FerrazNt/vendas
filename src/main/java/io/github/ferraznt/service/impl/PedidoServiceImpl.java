@@ -65,11 +65,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     }
 
-    @Override
-    public Optional<Pedido> findById(Integer id) {
-        return pedidosRepository.findById(id);
-    }
-
     private List<ItemPedido> converterItem(Pedido pedido, List<ItemPedidoDTO> itens){
         if(itens.isEmpty()){
             throw new RegraNegocioException("INFO! Pedido necessita de Itens.");
@@ -90,6 +85,10 @@ public class PedidoServiceImpl implements PedidoService {
                     itemPedido.setProduto(produto);
                     return itemPedido;
                 }).collect(Collectors.toList());
+    }
 
+    @Override
+    public Optional<Pedido> obterPedidoCompleto(Integer id) {
+        return pedidosRepository.findByIdFetchItens(id);
     }
 }
