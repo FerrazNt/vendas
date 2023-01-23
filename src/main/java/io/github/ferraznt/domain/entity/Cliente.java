@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 @Entity
@@ -23,10 +25,13 @@ public class Cliente {
     private Integer id;
 
     @Column(name = "nome", length = 100)
+    @NotEmpty(message = "Campo nome é Obrigatório.")
     private String nome;
 
 
     @Column(name = "cpf", unique = true, length = 11)
+    @NotEmpty(message = "Campo CPF é Obrigatório.")
+    @CPF(message = "Favor informar um CPF Válido.")
     private String Cpf;
 
     //FetchType.LAZY já é o Default, mas foi colocado aqui para elucidar que

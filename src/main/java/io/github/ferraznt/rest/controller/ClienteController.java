@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,7 +30,7 @@ public class ClienteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente salvar(@RequestBody Cliente cliente){
+    public Cliente salvar(@RequestBody @Valid Cliente cliente){
         return clientesRepository.save(cliente);
     }
 
@@ -49,7 +50,7 @@ public class ClienteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     // @ResponseBody Dessnecessário quando a Classe está anotada com RestController
     public void atualizar(@PathVariable Integer id,
-                          @RequestBody Cliente cliente){
+                          @RequestBody @Valid Cliente cliente){
        clientesRepository.findById(id)
                .map(clienteExiste -> {
                    cliente.setId(clienteExiste.getId());
