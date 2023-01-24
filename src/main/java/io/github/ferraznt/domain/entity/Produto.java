@@ -21,11 +21,11 @@ public class Produto {
     private Integer id;
 
     @Column(name = "descricao", length = 200)
-    @NotEmpty(message = "Campo DESCRIÇÃO é Obrigatório.")
+    @NotEmpty(message = "{campo.descricao.obrigatorio}")
     private String descricao;
 
     @Column(name = "preco_unitario")
-    @NotNull(message = "Campo PREÇÕ UNITÁRTIO é Obrigatório.")
+    @NotNull(message = "{campo.preco.obrigatorio}")
     private BigDecimal preco_unitario;
 
 

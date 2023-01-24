@@ -25,13 +25,13 @@ public class Cliente {
     private Integer id;
 
     @Column(name = "nome", length = 100)
-    @NotEmpty(message = "Campo nome é Obrigatório.")
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String nome;
 
 
     @Column(name = "cpf", unique = true, length = 11)
-    @NotEmpty(message = "Campo CPF é Obrigatório.")
-    @CPF(message = "Favor informar um CPF Válido.")
+    @NotEmpty(message = "{campo.cpf.obrigatorio}")
+    @CPF(message = "{campo.cpf.invalido}")
     private String Cpf;
 
     //FetchType.LAZY já é o Default, mas foi colocado aqui para elucidar que

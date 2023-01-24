@@ -1,5 +1,6 @@
 package io.github.ferraznt.rest.dto;
 
+import io.github.ferraznt.validation.NotEmptyList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,10 +25,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PedidoDTO {
-    @NotNull(message = "Campo CLIENTE do Pedido é Obrigatório.")
+    @NotNull(message = "{campo.codigo-cliente.obrigatorio}")
     private Integer cliente;
 
-    @NotNull(message = "Campo TOTAL do Pedido é Obrigatório.")
+    @NotNull(message = "{campo.total-pedido.obrigatorio}")
     private BigDecimal total;
+
+    @NotEmptyList(message = "{campo.itens-pedido.obrigatorio}")
     private List<ItemPedidoDTO> itens;
+
 }
