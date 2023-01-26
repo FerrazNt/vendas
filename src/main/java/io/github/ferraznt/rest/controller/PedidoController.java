@@ -32,7 +32,7 @@ public class PedidoController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Integer save(@RequestBody @Valid PedidoDTO dto){
+        public Integer save(@RequestBody @Valid PedidoDTO dto){
         Pedido pedido = pedidoService.salvar(dto);
         return pedido.getId();
     }
