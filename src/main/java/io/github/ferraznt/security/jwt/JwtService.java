@@ -1,6 +1,9 @@
-package io.github.ferraznt;
+package io.github.ferraznt.security.jwt;
 
+import io.github.ferraznt.VendasApplication;
 import io.github.ferraznt.domain.entity.Usuario;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +34,30 @@ public class JwtService {
                 .setExpiration(date)
                 .signWith(SignatureAlgorithm.HS512, chaveAssinatura)
                 .compact();
+
+    }
+
+    private Claims obterClaims(String token) throws ExpiredJwtException {
+        return Jwts
+                .parser()
+                .setSigningKey(chaveAssinatura)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public boolean tokenValido(String token){
+        try {
+            Claims claims = obterClaims(token);
+            Date dataExpiracao = claims.getExpiration();
+            LocalDateTime localDateTime = dataExpiracao.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            return !LocalDateTime.now().isAfter(localDateTime);
+        }catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String obterLoginUsuario(String token) throws ExpiredJwtException{
+        return (String) obterClaims(token).getSubject();
     }
 
     public static void main(String[] args) {
@@ -42,6 +69,12 @@ public class JwtService {
         String token = service.gerarToken(usuario);
 
         System.out.println(token);
+
+        Boolean isTokenValido = service.tokenValido(token);
+        System.out.println("O Token está Válido? "+isTokenValido);
+
+        System.out.println("Usuário Logado: "+service.obterLoginUsuario(token));
+
     }
 }
 
