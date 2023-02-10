@@ -1,5 +1,7 @@
 package io.github.ferraznt.config;
 
+import io.github.ferraznt.security.jwt.JwtAuthFilter;
+import io.github.ferraznt.security.jwt.JwtService;
 import io.github.ferraznt.service.impl.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -7,8 +9,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @EnableWebSecurity
@@ -16,7 +20,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UsuarioServiceImpl usuarioService;
-
+    @Autowired
+    private JwtService jwtService;
     // Serve para Criptografar e descriptografar a senha do usuário
     // No caso estou usando a BCrypte, implementação do Próprio Spring Security
     @Bean
@@ -26,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public OncePerRequestFilter jwtFilter(){
-        return null;
+        return new JwtAuthFilter(jwtService, usuarioService);
     }
 
 
@@ -35,15 +40,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // senha PasswordEncoder
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(usuarioService)
-                .passwordEncoder(passwordEncoder());
-
         //        Configuração em Memória só pra fazer um Teste
         //        auth.inMemoryAuthentication().passwordEncoder(passwordEncoder())
         //                .withUser("fulano")
         //                .password(passwordEncoder().encode("123"))
         //                .roles("USER","ADMIN");
+        auth
+                .userDetailsService(usuarioService)
+                .passwordEncoder(passwordEncoder());
     }
 
     // A Parte de Autorização: Tipo - Pegue o Usuário Autenticado e Verifique se ele tem autorização a uma determinada
@@ -66,19 +70,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
 
         .and()
-                .httpBasic();
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
         // Linha para Habilitar o Console H2 em Uso de Frames
         http.headers().frameOptions().disable();
         // Para Permitir Tudo, usar o .permitAll()
     }
 
-    /**
-     * // Exemplo de Formulário HTML para ser usado como página de Login alternativa no Método .formLongin()
-     * <form method="post">
-     *         <input type="text" name="username" />
-     *         <input type="secret" name="password" />
-     *         <button type="submit">Enviar</button>
-     *  </form>
-     */
+    // // Exemplo de Formulário HTML para ser usado como página de Login alternativa no Método .formLongin()
+    // <form method="post">
+    //         <input type="text" name="username" />
+    //         <input type="secret" name="password" />
+    //         <button type="submit">Enviar</button>
+    //  </form>
+
 }

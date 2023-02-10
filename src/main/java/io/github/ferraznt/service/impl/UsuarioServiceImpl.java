@@ -2,6 +2,7 @@ package io.github.ferraznt.service.impl;
 
 import io.github.ferraznt.domain.entity.Usuario;
 import io.github.ferraznt.domain.repository.UsuarioRepository;
+import io.github.ferraznt.exception.SenhaInvalidaException;
 import io.github.ferraznt.rest.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -40,10 +41,20 @@ public class UsuarioServiceImpl implements UserDetailsService {
 
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+    public UserDetails autenticar(Usuario usuario){
+        UserDetails userDetails = loadUserByUsername(usuario.getLogin());
+        boolean senhasBatem = encoder.matches(usuario.getSenha(), userDetails.getPassword());
+        if(senhasBatem){
+            return userDetails;
+        }
+        throw new SenhaInvalidaException();
 
-        Usuario usuario = usuarioRepository.findByLogin(s).orElseThrow(() ->
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        Usuario usuario = usuarioRepository.findByLogin(username).orElseThrow(() ->
                 new UsernameNotFoundException("Usuário não encontrado no nosso Banco de Dados"));
 
         String[] roles = usuario.isAdmin() ? new String[]{"ADMIN", "USER"} : new String[]{"USER"};
