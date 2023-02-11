@@ -2,6 +2,7 @@ package io.github.ferraznt.rest.controller;
 
 import io.github.ferraznt.domain.entity.Cliente;
 import io.github.ferraznt.domain.repository.ClientesRepository;
+import io.swagger.annotations.*;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/clientes")
+@Api("Api Clientes")
 public class ClienteController {
 
     //@Autowired
@@ -23,13 +25,26 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public Cliente getClienteById(@PathVariable Integer id){
+    @ApiOperation("Obter detalhes de um Cliente")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Cliente Encontrado."),
+            @ApiResponse(code = 404, message = "Cliente Não Encontrado para o ID informado.")
+    })
+    public Cliente getClienteById(@ApiParam(name = "id"
+                                          , value = "ID do Usuário"
+                                          , example = "1"
+                                          , required = true) @PathVariable Integer id){
         return  clientesRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "INFO! Cliente Não Encontrado."));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Salva um NOVO Cliente")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Cliente Salvo com Sucesso."),
+            @ApiResponse(code = 400, message = "Erro de Validação.")
+    })
     public Cliente salvar(@RequestBody @Valid Cliente cliente){
         return clientesRepository.save(cliente);
     }

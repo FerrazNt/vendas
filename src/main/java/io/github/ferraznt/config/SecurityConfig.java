@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -78,6 +79,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Linha para Habilitar o Console H2 em Uso de Frames
         http.headers().frameOptions().disable();
         // Para Permitir Tudo, usar o .permitAll()
+    }
+
+    // Liberando URLs do Swagger
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs",
+                                            "/configuration/ui",
+                                            "/swagger-resources/**",
+                                            "/configuration/security",
+                                            "/swagger-ui.html",
+                                            "/webjars/**");
     }
 
     // // Exemplo de Formulário HTML para ser usado como página de Login alternativa no Método .formLongin()
