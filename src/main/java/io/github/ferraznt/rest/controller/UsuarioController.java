@@ -8,7 +8,6 @@ import io.github.ferraznt.rest.dto.UsuarioDTO;
 import io.github.ferraznt.security.jwt.JwtService;
 import io.github.ferraznt.service.impl.UsuarioServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

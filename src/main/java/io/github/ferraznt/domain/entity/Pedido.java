@@ -19,8 +19,7 @@ import java.util.List;
 public class Pedido {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "PEDIDO_SEQ")
-    @SequenceGenerator(name = "PEDIDO_SEQ", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

@@ -16,8 +16,7 @@ import javax.persistence.*;
 public class ItemPedido {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "ITEM_PEDIDO_SEQ")
-    @SequenceGenerator(name = "ITEM_PEDIDO_SEQ", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
